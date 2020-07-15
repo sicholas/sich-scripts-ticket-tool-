@@ -99,7 +99,7 @@ async def on_message(message):
                         admin_role = get(guild.roles, name="Scripter")
                         category = discord.utils.get(guild.categories, id=731823656983855135)
                         # , category=category
-                        channel = await guild.create_text_channel(str(display), overwrites=overwrites, category=category)
+                        channel = await guild.create_text_channel(ticket.user.display_name, overwrites=overwrites, category=category)
                         await channel.set_permissions(ticket.user, send_messages=True, read_messages=True, add_reactions=True, embed_links=True, attach_files=True, read_message_history=True, external_emojis=True)
                         await channel.set_permissions(admin_role, send_messages=True, read_messages=True, add_reactions=True, embed_links=True, attach_files=True, read_message_history=True, external_emojis=True)
                         new_embed = discord.Embed(title=f"{guild.name}", description=f"```{ticket.request}```",
