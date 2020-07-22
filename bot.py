@@ -7,8 +7,9 @@ from discord import Embed, CategoryChannel
 from discord.ext.commands import bot
 
 from TicketState import Ticket, TicketState
+from random_username.generate import generate_username
 
-TOKEN = 'NzAyOTAwMzIxMzQ0Njg0MTEy.XvvYuA.AsOx9qN24Mmbp5iY91YnQ04PBfo'
+TOKEN = 'NzAyOTAwMzIxMzQ0Njg0MTEy.XxiaFQ.Z1j-TCa2QgH34nndJS5ObjuO6E0'
 GUILD = '682057230098628663'
 client = discord.Client()
 tickets = []
@@ -30,8 +31,27 @@ async def on_message(message):
         if guild.name == GUILD:
             break
 
-    print(message.author.roles)
+    print(message.author)
     role_names = [role.name for role in message.author.roles]
+    name = str(message.channel)
+    if 'client' in str(message.channel) and message.author.id != 702900321344684112:
+        print('In client channel')
+        actual_channel = str(message.channel).replace('client-', '')
+        for channel in guild.channels:
+            if 'scripter-' + actual_channel == str(channel):
+                await message.guild.me.edit(nick='Client')
+                await channel.send(message.content)
+                await message.guild.me.edit(nick='Sichs Script Requester')
+
+    if 'scripter' in str(message.channel) and message.author.id != 702900321344684112:
+        print('In scripter channel')
+        actual_channel = str(message.channel).replace('scripter-', '')
+        for channel in guild.channels:
+            if 'client-' + actual_channel == str(channel):
+                await  message.guild.me.edit(nick='Scripter')
+                await channel.send(message.content)
+                await message.guild.me.edit(nick='Sichs Script Requester')
+
     if message.content == "!archive" and "Scripter" in role_names:
         print("Archiving")
         channel = message.channel
@@ -60,7 +80,7 @@ async def on_message(message):
             print(theMessage)
             embed = discord.Embed(title=f"{guild.name}", description=f"```{theMessage}```",
                                   timestamp=datetime.datetime.utcnow(), color=discord.Color.red())
-            embed.add_field(name="Ticket User", value=f"{author}")
+            # embed.add_field(name="Ticket User", value=f"{author}")
             embed.add_field(name="Server ID", value=f"{guild.id}")
             embed.set_footer(text="👍 to accept || 👎 to decline")
             pfp = author.avatar_url
@@ -75,7 +95,7 @@ async def on_message(message):
             channel2 = await author.create_dm()
             embed = discord.Embed(title=f"{guild.name}", description=f"```{theMessage}```",
                                   timestamp=datetime.datetime.utcnow(), color=discord.Color.red())
-            embed.add_field(name="Ticket User", value=f"{author}")
+            # embed.add_field(name="Ticket User", value=f"{author}")
             embed.add_field(name="Server ID", value=f"{guild.id}")
             embed.set_footer(text="Request Has Been Created, Please Wait for a Staff Member To Accept!")
             pfp = author.avatar_url
@@ -99,21 +119,27 @@ async def on_message(message):
                         admin_role = get(guild.roles, name="Scripter")
                         category = discord.utils.get(guild.categories, id=731823656983855135)
                         # , category=category
-                        channel = await guild.create_text_channel(ticket.user.display_name, overwrites=overwrites, category=category)
+                        username = generate_username(1)
+                        channel = await guild.create_text_channel('Client ' + str(username), overwrites=overwrites, category=category)
                         await channel.set_permissions(ticket.user, send_messages=True, read_messages=True, add_reactions=True, embed_links=True, attach_files=True, read_message_history=True, external_emojis=True)
-                        await channel.set_permissions(admin_role, send_messages=True, read_messages=True, add_reactions=True, embed_links=True, attach_files=True, read_message_history=True, external_emojis=True)
+
+                        channel1 = await guild.create_text_channel('Scripter ' + str(username), overwrites=overwrites, category=category)
+                        await channel1.set_permissions(user, send_messages=True, read_messages=True, add_reactions=True, embed_links=True, attach_files=True, read_message_history=True, external_emojis=True)
+
                         new_embed = discord.Embed(title=f"{guild.name}", description=f"```{ticket.request}```",
                                                   timestamp=datetime.datetime.utcnow(), color=discord.Color.red())
-                        new_embed.add_field(name="Request User", value=f"{ticket.user}")
+                        # new_embed.add_field(name="Request User", value=f"{ticket.user}")
                         new_embed.add_field(name="Server ID", value=f"{guild.id}")
-                        new_embed.set_footer(text="Script Has Been Accepted! Please wait for staff to assist you!")
+                        new_embed.set_footer(text="You will be communicating to a staff member via the bot. Please send a message!")
                         pfp = ticket.user.avatar_url
                         new_embed.set_thumbnail(url=pfp)
                         await channel.send(embed=new_embed)
+                        await channel1.send(embed=new_embed)
+
 
                         new_embed = discord.Embed(title=f"{guild.name}", description=f"{ticket.request}",
                                               timestamp=datetime.datetime.utcnow(), color=discord.Color.red())
-                        new_embed.add_field(name="Request User", value=f"{ticket.user}")
+                        # new_embed.add_field(name="Request User", value=f"{ticket.user}")
                         new_embed.add_field(name="Server ID", value=f"{guild.id}")
                         new_embed.set_footer(text="Script Has Been Accepted By " + str(user))
                         pfp = ticket.user.avatar_url
