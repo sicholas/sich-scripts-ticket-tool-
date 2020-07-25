@@ -41,7 +41,7 @@ async def on_message(message):
             if 'scripter-' + actual_channel == str(channel):
                 await message.guild.me.edit(nick='Client')
                 await channel.send(message.content)
-                await message.guild.me.edit(nick='Sichs Script Requester')
+                await message.guild.me.edit(nick='Sich\'s  Script Requester')
 
     if 'scripter' in str(message.channel) and message.author.id != 702900321344684112:
         print('In scripter channel')
@@ -50,7 +50,7 @@ async def on_message(message):
             if 'client-' + actual_channel == str(channel):
                 await  message.guild.me.edit(nick='Scripter')
                 await channel.send(message.content)
-                await message.guild.me.edit(nick='Sichs Script Requester')
+                await message.guild.me.edit(nick='Sich\' s Script Requester')
 
     if message.content == "!archive" and "Scripter" in role_names:
         print("Archiving")
