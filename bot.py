@@ -50,7 +50,7 @@ async def on_message(message):
             if 'client-' + actual_channel == str(channel):
                 await  message.guild.me.edit(nick='Scripter')
                 await channel.send(message.content)
-                await message.guild.me.edit(nick='Sich\' s Script Requester')
+                await message.guild.me.edit(nick='Sich\'s Script Requester')
 
     if message.content == "!archive" and "Scripter" in role_names:
         print("Archiving")
