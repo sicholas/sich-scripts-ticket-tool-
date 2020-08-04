@@ -55,8 +55,12 @@ async def on_message(message):
     if message.content == "!archive" and "Scripter" in role_names:
         print("Archiving")
         channel = message.channel
-        category = discord.utils.get(guild.categories, id=731843594708713553)
-        await channel.edit(category=category)
+        category = discord.utils.get(guild.categories, id=740250876157100153)
+        # await channel.edit(category=category)
+        if("Bot" in role_names):
+            await channel.edit(category=category)
+        else:
+            await channel.delete(reason=None)
     elif message.channel.id == 729922205106045069:
         ticket_created = False
         for guild in client.guilds:
@@ -118,9 +122,11 @@ async def on_message(message):
                         ticket.state = TicketState.CLAIMED
                         admin_role = get(guild.roles, name="Scripter")
                         category = discord.utils.get(guild.categories, id=731823656983855135)
+                        category2 = discord.utils.get(guild.categories, id=740245463906779246)
+
                         # , category=category
                         username = generate_username(1)
-                        channel = await guild.create_text_channel('Client ' + str(username), overwrites=overwrites, category=category)
+                        channel = await guild.create_text_channel('Client ' + str(username), overwrites=overwrites, category=category2)
                         await channel.set_permissions(ticket.user, send_messages=True, read_messages=True, add_reactions=True, embed_links=True, attach_files=True, read_message_history=True, external_emojis=True)
 
                         channel1 = await guild.create_text_channel('Scripter ' + str(username), overwrites=overwrites, category=category)
